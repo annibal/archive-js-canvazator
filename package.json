@@ -5,7 +5,7 @@
   "main": "dist/canvazator.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "demo": "echo \"Iniciando lista de demos\" && http-server demo -p 8042 -o",
+    "live": "echo \"Iniciando servidor local para demo ou docs\" && http-server ./ -p 8042 -o",
     "gulp": "gulp",
     "gulp:clean": "gulp clean",
     "gulp:build:canvazator": "gulp build:canvazator",
@@ -22,18 +22,18 @@
     "url": "https://github.com/annibal/canvazator/issues"
   },
   "homepage": "https://github.com/annibal/canvazator#readme",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.34",
+    "@babel/preset-env": "^7.0.0-beta.34",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-concat": "^2.6.1",
+    "gulp-include": "^2.3.1",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-uglify": "^3.0.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.0.0-beta.34",
-    "@babel/preset-env": "^7.0.0-beta.34"
   }
 }

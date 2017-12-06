@@ -4,9 +4,10 @@ var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
 var babel = require('gulp-babel');
+var include = require('gulp-include');
 
 var canvazatorFiles = [
-  'src/**/*.*',
+  'src/main.js',
 ]
 
 gulp.task('clean', function() {
@@ -17,6 +18,8 @@ gulp.task('clean', function() {
 gulp.task('build:canvazator', ['clean'], function() {
   return gulp.src(canvazatorFiles)
     .pipe(sourcemaps.init())
+      .pipe( include() )
+        .on('error', console.log)
       .pipe(babel({
         "presets": [
           ["env", {
@@ -26,8 +29,8 @@ gulp.task('build:canvazator', ['clean'], function() {
           }]
         ]
       }))
-      // .pipe(uglify())
-      .pipe(concat('canvazator.min.js'))
+    .pipe(uglify())
+    .pipe(concat('canvazator.min.js'))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist'));
 });

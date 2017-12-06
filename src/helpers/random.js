@@ -1,6 +1,8 @@
 
 // i'll provide incredible random functions!
 
-Canvazator.Random = class Random {
+Canvazator.Random = {
+  range:function(min, max) {
 
+  }
 }
