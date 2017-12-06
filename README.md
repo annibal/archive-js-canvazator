@@ -54,10 +54,14 @@ further tutorials will be added when available
 
 # Documentation
 Basically, there is this **Enginezator** thing that starts, loads everything via a **Loader**, then handles a continuous update **Looper** event-driven system.
+
 Also there is this **Thingzator** class (Thing is a class name rarely used) that represents anything and includes itself in the Enginezator loop
+
 Then there are several Helpers, like **Mathzator**, **Inputzator**, **Meshzator**, **Speedzator** etc that serve the purpose of aiding in creating custom objects, derivated from **Thingzator**
 
 # Contributing
 **Complain** at the Issues
+
 **Ask for Improvement** at the Issues as well (i guess?)
+
 **Contribute** by cloning and creating a Pull Request. All ideas are welcome!
