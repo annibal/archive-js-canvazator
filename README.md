@@ -55,7 +55,7 @@ Plans are, on an stable beta (yes), to have:
 * All source classes, with each unique test and example page
 * A packer, to allow custom integration with any project, or HMR on the fly
 
-further tutorials will be added when available
+Further tutorials will be added when available.
 
 # Documentation
 Basically, there is this **Enginezator** thing that starts, loads everything via a **Loader**, then handles a continuous update **Looper** event-driven system.
