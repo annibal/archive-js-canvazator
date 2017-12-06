@@ -3,8 +3,11 @@ JS Framework for creating stuff in canvas, game-driven.
 
 ## Why?
 At first i thought *Hey, let's make a js Framework!*
+
 Then i stared at other JS Game Engines and thought *Nah, whatever.*
+
 But one day, the will to create exceeded the frustration of "Being just another one", so i started this thing.
+
 
 # TODO List
 * [x] Say that a todo list is needed
@@ -21,7 +24,7 @@ But one day, the will to create exceeded the frustration of "Being just another 
 * [ ] Particlezator
 * [ ] Randomzator
 * [ ] Meshzator
-* [ ] Learn boxjs
+* s e p a r a t o r l i n e
 * [ ] Tank Game
 * [ ] Asteroids
 * [ ] Mini RPG
@@ -30,6 +33,7 @@ But one day, the will to create exceeded the frustration of "Being just another 
 * [ ] Flappy Bird
 * s e p a r a t o r l i n e
 * [ ] Actually learn js
+* [ ] Learn boxjs
 * [ ] Improve stuff
 * [ ] Automated tests (with that "passed" green thing big projects have)
 * [ ] Documentation pages
@@ -50,6 +54,7 @@ Plans are, on an stable beta (yes), to have:
 * A full-featured, minified, wrapped min file
 * All source classes, with each unique test and example page
 * A packer, to allow custom integration with any project, or HMR on the fly
+
 further tutorials will be added when available
 
 # Documentation
