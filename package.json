@@ -1,0 +1,22 @@
+{
+  "name": "canvazator",
+  "version": "0.0.1",
+  "description": "JS Framework for creating stuff in canvas, game-driven",
+  "main": "dist/canvazator.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annibal/canvazator.git"
+  },
+  "author": "annibal3d",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/annibal/canvazator/issues"
+  },
+  "homepage": "https://github.com/annibal/canvazator#readme",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  }
+}
