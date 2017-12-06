@@ -28,7 +28,7 @@ But one day, the will to create exceeded the frustration of "Being just another 
 * [ ] Racing Game
 * [ ] Fighting game
 * [ ] Flappy Bird
-* ----
+* s e p a r a t o r l i n e
 * [ ] Actually learn js
 * [ ] Improve stuff
 * [ ] Automated tests (with that "passed" green thing big projects have)
