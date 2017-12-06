@@ -3,6 +3,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
+var babel = require('gulp-babel');
 
 var canvazatorFiles = [
   'src/**/*.*',
@@ -17,9 +18,15 @@ gulp.task('build:canvazator', ['clean'], function() {
   return gulp.src(canvazatorFiles)
     .pipe(sourcemaps.init())
       .pipe(babel({
-          presets: ['env']
+        "presets": [
+          ["env", {
+            "targets": {
+              "browsers": ["last 2 versions", "safari >= 7"]
+            }
+          }]
+        ]
       }))
-      .pipe(uglify())
+      // .pipe(uglify())
       .pipe(concat('canvazator.min.js'))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist'));
