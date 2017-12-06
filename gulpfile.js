@@ -16,6 +16,9 @@ gulp.task('clean', function() {
 gulp.task('build:canvazator', ['clean'], function() {
   return gulp.src(canvazatorFiles)
     .pipe(sourcemaps.init())
+      .pipe(babel({
+          presets: ['env']
+      }))
       .pipe(uglify())
       .pipe(concat('canvazator.min.js'))
     .pipe(sourcemaps.write())
