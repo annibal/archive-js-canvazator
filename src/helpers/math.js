@@ -1,6 +1,6 @@
 
 // i take care of optimal math operations!
 
-class Mathzator {
+Canvazator.Math = class Math {
 
 }

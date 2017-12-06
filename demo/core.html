@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Canvazator - Core Demonstration</title>
+  </head>
+  <body>
+    <script type="text/javascript" src="../dist/canvazator.min.js"></script>
+    <script type="text/javascript">
+      var canvazator = new C();
+
+      class Bolinha extends C.Thing {
+        constructor() {
+          super();
+          this.x = C.width/2;
+          this.y = C.height/2;
+          this.w = C.width/12;
+          this.color = "red"
+          this.speed = {
+            h:C.Random.range(-10,10);
+            v:C.Random.range(-10,10);
+          }
+        }
+        update() {
+          this.x += this.speed.h;
+          this.y += this.speed.v;
+          if (this.x < 0) { this.speed.h = Math.abs(this.speed.h); }
+          if (this.x > C.width) { this.speed.h = -1*Math.abs(this.speed.h); }
+          if (this.y < 0) { this.speed.v = Math.abs(this.speed.v); }
+          if (this.y > C.height) { this.speed.v = -1*Math.abs(this.speed.v); }
+        }
+        draw() {
+          var g = C.context;
+          g.save();
+          g.fillStyle = this.color;
+
+          g.beginPath();
+          g.arc(this.x, this.y, this.w, 0, C.Math.PI2);
+          g.endPath();
+
+          g.fill();
+          g.restore();
+        }
+      }
+    </script>
+  </body>
+</html>
