@@ -8,8 +8,10 @@
     "live": "echo \"Iniciando servidor local para demo ou docs\" && http-server ./ -p 8042 -o",
     "gulp": "gulp",
     "gulp:clean": "gulp clean",
-    "gulp:build:canvazator": "gulp build:canvazator",
-    "gulp:watch:canvazator": "gulp watch:canvazator",
+    "gulp:build": "gulp build",
+    "gulp:build:dev": "gulp build:dev",
+    "gulp:build:dist": "gulp build:dist",
+    "gulp:watch": "gulp watch",
     "hue": "echo \"kek\""
   },
   "repository": {
@@ -33,6 +35,7 @@
     "gulp-babel": "^7.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-include": "^2.3.1",
+    "gulp-sequence": "^0.4.6",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-uglify": "^3.0.0"
   }
