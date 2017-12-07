@@ -14,6 +14,19 @@ class Canvazator {
         // object: if a DOMElement, uses it as canvas
         element:null,
     
+        // data to add to canvas element
+        // id: adds 1, 2.. if id already exists
+        // classes: adds all in the array, not necessary to be an array
+        // attributes: and array of keys and values to add. e.g.: {"data-thing":"stuff"}
+        htmlElementAttributes:{
+          id:"canvazator",
+          classes:[],
+          attributes:[]
+        },
+    
+        // if element is not null, should it add/replace the attributes defined above?
+        extendExistingElementAttributes:true,
+    
         // true: in case element (id or DOM) fails, throws fatal error and stops
         // false: creates element if element (id returns null, DOM is not a canvas) goes wrong, throws warning thought
         strict:false,
@@ -32,7 +45,8 @@ class Canvazator {
           height:100
         },
     
-        // parent, in case adjustmentType is set relative to parent
+        // parent, in case adjustmentType is set relative to parent, or to insert if element is null
+        // if not strict and containerElement is null, adds to body
         containerElement:null,
     
         // fixed size to be forced
@@ -63,9 +77,11 @@ class Canvazator {
               file
               html
                 - loads the image/video/audio/file/html into the DOM in a correspondent element
-                id
-                classes[]
-                attributes[{name, value}]
+                htmlElementAttributes:{
+                  id:"canvazator",
+                  classes:[],
+                  attributes:{name:value}
+                },
           */
         ]
       },
@@ -215,6 +231,18 @@ Canvazator.Substract = class Substract {
     this.create(_canvas);
   }
   create(_canvas) {
+    if (typeof _canvas !== "object") {
+      throw new Error("No config.canvas found on substracting");
+    }
+    if (_canvas.element == null) {
+      _canvas.element = document.createElement("canvas");
+      if (_canvas.strict && _canvas.containerElement == null) {
+        throw new Error("strict: No container element to insert a canvas");
+      }
+    }
+    if ( ((_canvas.element||{}).constructor||{}).name == "HTMLCanvasElement" && (_canvas.element||{}).parentElement != null ) {
+
+    }
     // check if parameter _canvas is a DOM element, a id, or null
     // create or find the canvas
     // bind the resize events
@@ -223,7 +251,62 @@ Canvazator.Substract = class Substract {
 
   }
   updateGlobals(obj) {
-    
+
+  }
+  
+}
+
+
+/*
+  give me an element, like <div>;
+
+  then i turn this
+
+  htmlElementAttributes:{
+    id:"canvazator",
+    classes:["ball","reddish"],
+    attributes{
+      "data-thing":"stuff"
+    }
+  }
+
+  into this
+
+  <div id="canvazator2" class="ball reddish" data-thing="stuff"></div>
+*/
+
+Canvazator.HTMLAttributeHandler = class HTMLAttributeHandler {
+  constructor(elm, data) {
+    this.handle(elm, data)
+  }
+
+  handle(elm, data) {
+    if (elm == null || data == null) return;
+    if (data.id != null && data.id != undefined) {
+      var existingElmWithThisId = document.getElementById(data.id)
+      if (existingElmWithThisId != null && existingElmWithThisId != elm) {
+        var idn = 2;
+        existingElmWithThisId = document.getElementById(data.id+idn)
+        while (existingElmWithThisId != null && existingElmWithThisId != elm && idn < 16384) {
+          idn++;
+          existingElmWithThisId = document.getElementById(data.id+idn)
+        }
+        data.id+=idn;
+      }
+
+      elm.id = data.id;
+    }
+    if (typeof data.classes == "string" ) {
+      elm.classList.value = data.classes;
+    }
+    if (typeof data.classes == "object" && data.classes.length > 0) {
+      elm.classList.value = data.classes.join(" ");
+    }
+    if (data.attributes) {
+      Object.keys(data.attributes).forEach(key => {
+        elm.setAttribute(key,data.attributes[key]);
+      })
+    }
   }
 }
 

@@ -8,6 +8,19 @@ var defaultConfig = {
     // object: if a DOMElement, uses it as canvas
     element:null,
 
+    // data to add to canvas element
+    // id: adds 1, 2.. if id already exists
+    // classes: adds all in the array, not necessary to be an array
+    // attributes: and array of keys and values to add. e.g.: {"data-thing":"stuff"}
+    htmlElementAttributes:{
+      id:"canvazator",
+      classes:[],
+      attributes:[]
+    },
+
+    // if element is not null, should it add/replace the attributes defined above?
+    extendExistingElementAttributes:true,
+
     // true: in case element (id or DOM) fails, throws fatal error and stops
     // false: creates element if element (id returns null, DOM is not a canvas) goes wrong, throws warning thought
     strict:false,
@@ -26,7 +39,8 @@ var defaultConfig = {
       height:100
     },
 
-    // parent, in case adjustmentType is set relative to parent
+    // parent, in case adjustmentType is set relative to parent, or to insert if element is null
+    // if not strict and containerElement is null, adds to body
     containerElement:null,
 
     // fixed size to be forced
@@ -57,9 +71,11 @@ var defaultConfig = {
           file
           html
             - loads the image/video/audio/file/html into the DOM in a correspondent element
-            id
-            classes[]
-            attributes[{name, value}]
+            htmlElementAttributes:{
+              id:"canvazator",
+              classes:[],
+              attributes:{name:value}
+            },
       */
     ]
   },

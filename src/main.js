@@ -30,6 +30,7 @@ class Canvazator {
 //=require core/input.js
 //=require core/loader.js
 //=require core/substract.js
+//=require helpers/HTMLAttributeHandler.js
 //=require helpers/math.js
 //=require helpers/mesh.js
 //=require helpers/particles.js
