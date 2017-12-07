@@ -3,6 +3,10 @@
 
 Canvazator.Engine = class Engine {
   constructor() {
+    this.create();
+  }
+  create() {
     // call loop events
+
   }
 }

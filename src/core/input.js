@@ -2,8 +2,11 @@
 // i handle the input!
 
 Canvazator.Input = class Input {
-  constructor(_custom) {
-    // extends a default list of inputs
+  constructor(_inputs) {
+    this.create(_inputs);
+  }
+  create(_inputs) {
     // binds events to feed this list
+
   }
 }
