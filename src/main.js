@@ -4,22 +4,24 @@
 class Canvazator {
   constructor(config) {
 
-    //=require defaultconfig.js;
+    //=require defaultconfig.js
     Object.assign(defaultConfig, config);
     this.config = defaultConfig;
 
     // initialize Substract
-    this.substract = Canvazator.Substract(config.canvas);
-    this.substract.updateGlobals(this);
+    this._substract = new Canvazator.Substract(this.config.canvas);
+    this._substract.updateGlobals(this);
 
     // call loader to load stuff
-    this.loader = Canvazator.Loader(config.assets);
+    this._loader = new Canvazator.Loader(this.config.assets);
 
     // initialize input to listen for events
-    this.input = Canvazator.Input(config.input);
+    this._input = new Canvazator.Input(this.config.input);
 
     // start the engines
-    this.engine = Canvazator.Engine();
+    this._engine = new Canvazator.Engine();
+
+    Object.assign(this, Canvazator);
   }
 }
 

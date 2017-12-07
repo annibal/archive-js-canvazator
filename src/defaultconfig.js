@@ -1,7 +1,7 @@
 
 // default configuration and some reference comments about stuff
 
-defaultConfig = {
+var defaultConfig = {
   canvas: {
     // null or undefined: creates a canvas element
     // string: tries to find by that id
