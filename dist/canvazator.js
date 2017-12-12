@@ -37,6 +37,7 @@ class Canvazator {
         // maintain-ratio-element:  maintains current w/h ratio based on parent element
         // fixed-size:              forces fixed size
         // ignore:                  does not set size, obtains and updates on resize
+        // custom:                  uses customSize function, sending canvasElement, containerElement, windowElement and config as parameters, and expecting {width,height} as a return value
         adjustmentType:"fill-screen",
     
         // width and height percentage based on screen or parent element
@@ -50,9 +51,18 @@ class Canvazator {
         containerElement:null,
     
         // fixed size to be forced
-        fixedSize:{
+        size:{
           width:640,
           height:480
+        },
+    
+        // needs to return object with width and height
+        // used when adjustmentType == "custom"
+        customSize:function(canvasElement,containerElement,windowElement,config){
+          return {
+            width:640,
+            height:480
+          }
         },
     
         // wether updates when screen or parent element resize
@@ -147,8 +157,10 @@ class Canvazator {
       }
     }
     
-    Object.assign(defaultConfig, config);
-    this.config = defaultConfig;
+    console.log(defaultConfig.canvas.containerElement)
+    this.config = Canvazator.ObjectMerger.merge(defaultConfig, config);
+    console.log(defaultConfig.canvas.containerElement)
+    console.log(config.canvas.containerElement)
 
     // initialize Substract
     this._substract = new Canvazator.Substract(this.config.canvas);
@@ -236,6 +248,7 @@ Canvazator.Substract = class Substract {
       return;
     }
 
+    var createdCanvas = false;
     // creates? canvas
     if (typeof _canvas.element == "string") {
       _canvas.element = document.getElementById(_canvas.element);
@@ -251,6 +264,7 @@ Canvazator.Substract = class Substract {
     if (_canvas.element == null) {
       _canvas.extendExistingElementAttributes = true;
       _canvas.element = document.createElement("canvas");
+      createdCanvas = true;
     }
     if (_canvas.element.constructor == null || _canvas.element.constructor.name != "HTMLCanvasElement") {
       if (_canvas.strict) {
@@ -260,6 +274,7 @@ Canvazator.Substract = class Substract {
         console.warn("Element set to use as canvas is invalid, a new element will be assigned");
       }
       _canvas.element = document.createElement("canvas");
+      createdCanvas = true;
     }
 
     // appends canvas
@@ -289,16 +304,74 @@ Canvazator.Substract = class Substract {
     if (_canvas.extendExistingElementAttributes) {
       new Canvazator.HTMLAttributeHandler().handle(_canvas.element,_canvas.htmlElementAttributes);
     }
-    var windowSize = {width:window.innerWidth, height:window.innerHeight;}
-    var containerSize = {width:_canvas.containerElement.clientWidth, height:_canvas.containerElement.clientHeight;}
-    var canvasSize = {width:_canvas.element.clientWidth, height:_canvas.element.clientHeight;}
 
+    // updates _canvas.size if needed
+    if (!createdCanvas && _canvas.adjustmentType != 'fixed-size') {
+      _canvas.size.width = _canvas.element.width;
+      _canvas.size.height = _canvas.element.height;
+    }
 
-    // bind the resize events
-    // obtain context
-    // obtain width/height
+    // obtains window and parent size
+    var windowSize = {width:window.innerWidth, height:window.innerHeight}
+    var containerSize = {width:_canvas.containerElement.clientWidth, height:_canvas.containerElement.clientHeight}
+    // then the ratio
+    if (_canvas.adjustmentType == "fill-screen" || _canvas.adjustmentType == "fill-element") {
+      _canvas.adjustmentRatio = {
+        width:100,
+        height:100
+      }
+    }
+    if (_canvas.adjustmentType == "maintain-ratio-screen") {
+      _canvas.adjustmentRatio = {
+        width:_canvas.size.width / windowSize.width * 100,
+        height:_canvas.size.height / windowSize.height * 100
+      }
+    }
+    if (_canvas.adjustmentType == "maintain-ratio-element") {
+      _canvas.adjustmentRatio = {
+        width:_canvas.size.width / containerSize.width * 100,
+        height:_canvas.size.height / containerSize.height * 100
+      }
+    }
+
+    this.updateSize(_canvas)
 
   }
+
+  updateSize(config) {
+    var newSize;
+    switch (config.adjustmentType) {
+      case "fill-screen":
+        newSize = {width:window.innerWidth, height:window.innerHeight};
+        break;
+      case "fill-element":
+        newSize = {width:_canvas.containerElement.clientWidth, height:_canvas.containerElement.clientHeight};
+        break;
+      case "maintain-ratio-screen":
+        newSize = {
+          width:window.innerWidth * config.adjustmentRatio.width,
+          height:window.innerHeight * config.adjustmentRatio.height
+        };
+        break;
+      case "maintain-ratio-element":
+        newSize = {
+          width:config.containerElement.clientWidth * config.adjustmentRatio.width,
+          height:config.containerElement.clientHeight * config.adjustmentRatio.height
+        };
+        break;
+      case "fixed-size":
+        newSize = {width:config.element.width, height:config.element.height}
+        break;
+      case "custom":
+        newSize = config.customSize(config.element,config.containerElement,window,config);
+        break;
+      default:
+        console.error("Unknown adjustmentType "+config.adjustmentType);
+    }
+    config.element.width = newSize.width;
+    config.element.height = newSize.height;
+  }
+
   updateGlobals(obj) {
 
   }
@@ -357,6 +430,111 @@ Canvazator.HTMLAttributeHandler = class HTMLAttributeHandler {
       })
     }
   }
+}
+
+/*
+
+  if you have this
+  a = {
+    x:78,
+    y:{
+      start:0,
+      end:120,
+    },
+    z:{
+      things:[1,2,3]
+    },
+    border:{
+      color:"red",
+      style:"dashed",
+      size:{
+        value:15,
+        attribute:"px"
+      }
+    }
+  }
+
+  and you want to merge with
+  b = {
+    x:6000,
+    z:{
+      things:[4],
+      otherThings:[5,6,7,8]
+    },
+    border:{size:{value:32}}
+  }
+
+  who you gonna call?
+
+  objectMerger.merge(a,b); // !
+
+  also accepts:
+  - objectMerger.merge(a,[b,c,d]);
+  - objectMerger.merge(a,b,c,d,e);
+
+  set concatArrays to false to replace arrays as any property
+  set concatArrays to true to append merge arrays to receiver
+  default true
+
+  all the rest gets replaced
+
+*/
+
+Canvazator.ObjectMerger = class ObjectMerger {}
+Canvazator.ObjectMerger.concatArrays = true;
+
+Canvazator.ObjectMerger.merge = function(receiver, modifications) {
+  if (receiver == null) {
+    throw new Error("Can't modify a null receiver");
+    return;
+  }
+  if (arguments[1] != undefined) {
+    modifications = Array.from(arguments);
+    modifications.shift();
+  }
+  if (modifications != undefined) {
+    modifications.forEach(mod => {
+      receiver = this.singleMerge(receiver, mod);
+    })
+  }
+  return receiver;
+}
+Canvazator.ObjectMerger.singleMerge = function(base, mod) {
+  if (mod == null) return base;
+  Object.keys(base).forEach(function(prop) {
+
+    if (mod[prop] == null) return; // break;
+
+    if (this.hasDeeperLevels(base[prop])) {
+      base[prop] = this.singleMerge(base[prop], mod[prop]);
+    } else {
+      if (Array.isArray(base[prop]) && this.concatArrays) {
+        base[prop] = base[prop].concat(mod[prop]);
+      } else {
+        base[prop] = mod[prop];
+      }
+    }
+  }.bind(this))
+  Object.keys(mod).forEach(function(prop) {
+    if (base[prop] == null) {
+      base[prop] = mod[prop];
+    }
+  })
+
+  return base;
+}
+/*
+  1: false
+  "a": false
+  []: false
+  {}: false
+  {hue:5}: true
+  {hue:"kek"}: true
+  {hue:[]}: true
+  {hue:{}}: true
+*/
+Canvazator.ObjectMerger.hasDeeperLevels = function(level) {
+  return level != null && Object.keys(level).length > 0 && !Array.isArray(level) && typeof level == "object";
 }
 
 

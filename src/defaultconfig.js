@@ -31,6 +31,7 @@ var defaultConfig = {
     // maintain-ratio-element:  maintains current w/h ratio based on parent element
     // fixed-size:              forces fixed size
     // ignore:                  does not set size, obtains and updates on resize
+    // custom:                  uses customSize function, sending canvasElement, containerElement, windowElement and config as parameters, and expecting {width,height} as a return value
     adjustmentType:"fill-screen",
 
     // width and height percentage based on screen or parent element
@@ -44,9 +45,18 @@ var defaultConfig = {
     containerElement:null,
 
     // fixed size to be forced
-    fixedSize:{
+    size:{
       width:640,
       height:480
+    },
+
+    // needs to return object with width and height
+    // used when adjustmentType == "custom"
+    customSize:function(canvasElement,containerElement,windowElement,config){
+      return {
+        width:640,
+        height:480
+      }
     },
 
     // wether updates when screen or parent element resize
