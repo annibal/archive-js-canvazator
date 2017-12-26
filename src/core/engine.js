@@ -1,5 +1,5 @@
 
-// i take care of the loop!
+// i take care of the loop  !
 
 Canvazator.Engine = class Engine {
   constructor() {
